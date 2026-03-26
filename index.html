@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Articles: A · AN · THE · ∅</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fff9f0;--surface:#fff3e2;--card:#ffffff;
+  --border:#f0e0c8;--border2:#ddc8a8;
+  --ink:#1c1008;--ink2:#6b4f30;--muted:#b89870;
+  --a:#e67e22;--a-l:rgba(230,126,34,.12);--a-b:rgba(230,126,34,.3);
+  --an:#16a085;--an-l:rgba(22,160,133,.12);--an-b:rgba(22,160,133,.3);
+  --the:#2980b9;--the-l:rgba(41,128,185,.12);--the-b:rgba(41,128,185,.3);
+  --zero:#8e44ad;--zero-l:rgba(142,68,173,.12);--zero-b:rgba(142,68,173,.3);
+  --green:#15803d;--gbg:rgba(21,128,61,.09);
+  --red:#b91c1c;--rbg:rgba(185,28,28,.08);
+  --gold:#b45309;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;min-height:100vh}
+
+/* HEADER */
+.hdr{
+background:linear-gradient(135deg,#92400e 0%,#b45309 40%,#1d4ed8 100%);
+padding:18px 22px;display:flex;align-items:center;gap:14px;
+}
+.hdr-icon{
+width:50px;height:50px;border-radius:14px;flex-shrink:0;
+background:rgba(255,255,255,.15);
+display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+}
+.hdr-text h1{font-size:1.2rem;font-weight:900;color:#fff;letter-spacing:-.02em}
+.hdr-text p{font-size:.72rem;color:rgba(255,255,255,.55);margin-top:2px}
+.hdr-pts{margin-left:auto;text-align:right}
+.hdr-pts-num{font-family:‘DM Mono’,monospace;font-size:2rem;font-weight:500;color:#fde68a;line-height:1}
+.hdr-pts-lbl{font-size:.6rem;color:rgba(255,255,255,.4)}
+
+/* BIG FOUR */
+.big4{display:flex;background:var(–ink)}
+.b4{
+flex:1;padding:13px 6px;text-align:center;cursor:pointer;
+transition:all .2s;border-bottom:4px solid transparent;
+}
+.b4:hover{background:rgba(255,255,255,.05)}
+.b4-word{font-family:‘DM Mono’,monospace;font-size:1.3rem;font-weight:500;color:#fff;line-height:1}
+.b4-sub{font-size:.58rem;color:rgba(255,255,255,.35);margin-top:3px;text-transform:uppercase;letter-spacing:.05em}
+.b4.act-a   {background:var(–a-l);border-bottom-color:var(–a)}   .b4.act-a   .b4-word{color:#fdba74}
+.b4.act-an  {background:var(–an-l);border-bottom-color:var(–an)}  .b4.act-an  .b4-word{color:#5eead4}
+.b4.act-the {background:var(–the-l);border-bottom-color:var(–the)} .b4.act-the .b4-word{color:#93c5fd}
+.b4.act-zero{background:var(–zero-l);border-bottom-color:var(–zero)}.b4.act-zero .b4-word{color:#d8b4fe}
+.b4.act-mix {background:rgba(255,255,255,.06);border-bottom-color:#fff}.b4.act-mix  .b4-word{color:#fff}
+
+/* SUB TABS */
+.stabs{background:var(–surface);border-bottom:1px solid var(–border);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 14px}
+.stabs::-webkit-scrollbar{display:none}
+.st{padding:9px 16px;cursor:pointer;white-space:nowrap;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(–muted);border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:all .18s;background:none;border-top:none;border-left:none;border-right:none;font-family:‘Outfit’,sans-serif}
+.st:hover{color:var(–ink2)}
+.st.s-a   {color:var(–a);border-bottom-color:var(–a)}
+.st.s-an  {color:var(–an);border-bottom-color:var(–an)}
+.st.s-the {color:var(–the);border-bottom-color:var(–the)}
+.st.s-zero{color:var(–zero);border-bottom-color:var(–zero)}
+.st.s-mix {color:#6d28d9;border-bottom-color:#6d28d9}
+
+/* PROGRESS */
+.prog{height:3px;background:var(–border)}
+.pf{height:100%;transition:width .4s ease}
+
+/* WRAP */
+.wrap{max-width:720px;margin:0 auto;padding:20px 13px 80px}
+
+/* REF CARD */
+.ref{background:var(–card);border:1.5px solid var(–border);border-radius:16px;padding:18px 20px;margin-bottom:18px}
+.ref-title{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(–muted);margin-bottom:14px}
+.ref-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+@media(max-width:540px){.ref-grid{grid-template-columns:repeat(2,1fr)}}
+.rb{border-radius:10px;padding:11px 12px;border:1.5px solid}
+.rb-word{font-family:‘DM Mono’,monospace;font-size:1.1rem;font-weight:500;margin-bottom:7px}
+.rb-items{font-size:.71rem;line-height:1.65;color:var(–ink2)}
+.rb-items span{display:block}
+.rb-a   {background:var(–a-l);border-color:var(–a-b)}    .rb-a   .rb-word{color:var(–a)}
+.rb-an  {background:var(–an-l);border-color:var(–an-b)}   .rb-an  .rb-word{color:var(–an)}
+.rb-the {background:var(–the-l);border-color:var(–the-b)}  .rb-the .rb-word{color:var(–the)}
+.rb-zero{background:var(–zero-l);border-color:var(–zero-b)}.rb-zero .rb-word{color:var(–zero)}
+
+/* STATS */
+.stats{display:flex;gap:8px;margin-bottom:16px}
+.stat{flex:1;background:var(–card);border:1.5px solid var(–border);border-radius:11px;padding:9px 10px;text-align:center}
+.sv{font-family:‘DM Mono’,monospace;font-size:1.3rem;font-weight:500;line-height:1}
+.sl{font-size:.6rem;color:var(–muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+
+/* QUESTION CARD */
+.qcard{background:var(–card);border:2px solid var(–border);border-radius:15px;overflow:hidden;margin-bottom:12px;transition:border-color .22s,box-shadow .22s}
+.qcard.ok  {border-color:var(–green);box-shadow:0 2px 10px rgba(21,128,61,.1)}
+.qcard.fail{border-color:var(–red);box-shadow:0 2px 10px rgba(185,28,28,.09)}
+.qcard-top{padding:14px 17px 11px;border-bottom:1px solid var(–border)}
+.qmeta{display:flex;align-items:center;gap:7px;margin-bottom:8px;flex-wrap:wrap}
+.qnum{width:27px;height:27px;border-radius:7px;flex-shrink:0;background:var(–surface);border:1.5px solid var(–border2);display:flex;align-items:center;justify-content:center;font-family:‘DM Mono’,monospace;font-size:.7rem;color:var(–ink2);font-weight:500}
+.qcard.ok   .qnum{background:var(–green);color:#fff;border-color:var(–green)}
+.qcard.fail .qnum{background:var(–red);color:#fff;border-color:var(–red)}
+.qtag{font-size:.6rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:2px 8px;border-radius:20px}
+.tg-a   {background:var(–a-l);color:var(–a)}
+.tg-an  {background:var(–an-l);color:var(–an)}
+.tg-the {background:var(–the-l);color:var(–the)}
+.tg-zero{background:var(–zero-l);color:var(–zero)}
+.tg-err {background:rgba(180,83,9,.1);color:var(–gold)}
+.tg-mix {background:rgba(109,40,217,.1);color:#6d28d9}
+.qlbl{font-size:.62rem;color:var(–muted);margin-left:auto;font-family:‘DM Mono’,monospace}
+.qinstr{font-size:.76rem;color:var(–ink2);margin-bottom:7px;line-height:1.5}
+.qsent{background:var(–surface);border:1.5px solid var(–border);border-radius:9px;padding:11px 14px;font-size:.95rem;line-height:1.75;color:var(–ink);font-weight:700}
+.qsent .gap{display:inline-block;min-width:50px;border-bottom:2.5px solid var(–muted);text-align:center;color:var(–muted);font-style:italic;font-weight:400;margin:0 3px;font-size:.86rem}
+.qsent .ew{background:rgba(185,28,28,.1);border-bottom:2px solid var(–red);padding:1px 4px;border-radius:4px;color:var(–red);font-weight:700}
+.sig{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:.65rem;color:var(–muted);background:rgba(255,255,255,.7);border:1px solid var(–border);border-radius:5px;padding:2px 8px;font-family:‘DM Mono’,monospace}
+
+/* 4 BUTTONS */
+.four-btns{display:flex;gap:8px;padding:12px 15px;flex-wrap:wrap}
+.art-btn{
+flex:1;min-width:60px;padding:11px 6px;border-radius:11px;border:2px solid var(–border);
+font-family:‘DM Mono’,monospace;font-size:1rem;font-weight:500;
+cursor:pointer;transition:all .15s;background:var(–surface);color:var(–ink);text-align:center;
+}
+.art-btn:hover:not(.dis){transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.07)}
+.art-btn.a-h:hover:not(.dis)  {border-color:var(–a);background:var(–a-l);color:var(–a)}
+.art-btn.an-h:hover:not(.dis) {border-color:var(–an);background:var(–an-l);color:var(–an)}
+.art-btn.the-h:hover:not(.dis){border-color:var(–the);background:var(–the-l);color:var(–the)}
+.art-btn.zero-h:hover:not(.dis){border-color:var(–zero);background:var(–zero-l);color:var(–zero)}
+.art-btn.ok {border-color:var(–green);background:var(–gbg);color:var(–green);font-weight:700}
+.art-btn.bad{border-color:var(–red);background:var(–rbg);color:var(–red)}
+.art-btn.dis{cursor:default;opacity:.7}
+.art-btn-lbl{font-size:.58rem;display:block;margin-top:2px;font-family:‘Outfit’,sans-serif;font-weight:600;opacity:.65}
+
+/* MC */
+.opts{display:flex;flex-direction:column;gap:7px;padding:12px 15px}
+.opt{display:flex;align-items:center;gap:8px;background:var(–surface);border:2px solid var(–border);border-radius:9px;padding:9px 13px;cursor:pointer;font-size:.86rem;font-weight:600;color:var(–ink);transition:all .14s;user-select:none}
+.opt:hover:not(.dis){border-color:var(–a);background:var(–a-l)}
+.opt.ok {border-color:var(–green);background:var(–gbg);color:var(–green);font-weight:800}
+.opt.bad{border-color:var(–red);background:var(–rbg);color:var(–red)}
+.opt.dis{cursor:default}
+.ol{width:24px;height:24px;flex-shrink:0;border-radius:6px;border:2px solid var(–border);background:var(–card);display:flex;align-items:center;justify-content:center;font-family:‘DM Mono’,monospace;font-size:.68rem;font-weight:700}
+.opt.ok  .ol{background:var(–green);color:#fff;border-color:var(–green)}
+.opt.bad .ol{background:var(–red);color:#fff;border-color:var(–red)}
+
+/* WRITE */
+.write-area{padding:12px 15px}
+.wr{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.wi{background:var(–surface);border:2px solid var(–border);border-radius:9px;padding:8px 13px;color:var(–ink);font-family:‘DM Mono’,monospace;font-size:.9rem;font-weight:500;flex:1;min-width:140px;outline:none;transition:border-color .2s}
+.wi:focus{border-color:var(–a)}
+.wi.ok  {border-color:var(–green);background:var(–gbg);color:var(–green)}
+.wi.fail{border-color:var(–red);background:var(–rbg)}
+.wi:disabled{opacity:.85}
+.chk{background:var(–a);color:#fff;border:none;border-radius:9px;padding:8px 18px;font-family:‘Outfit’,sans-serif;font-size:.83rem;font-weight:800;cursor:pointer;transition:opacity .2s;white-space:nowrap}
+.chk:hover{opacity:.85}
+.chk:disabled{background:var(–border);color:var(–muted);cursor:default}
+
+/* FEEDBACK */
+.fb{margin:0 15px 13px;padding:11px 13px;border-radius:9px;font-size:.79rem;line-height:1.65;display:none}
+.fb.show{display:block}
+.fb.ok  {background:var(–gbg);border:1px solid rgba(21,128,61,.22);color:#14532d}
+.fb.fail{background:var(–rbg);border:1px solid rgba(185,28,28,.18);color:#7f1d1d}
+.fb .cor{margin-top:7px;padding:7px 11px;background:rgba(21,128,61,.1);border-radius:7px;font-family:‘DM Mono’,monospace;font-size:.8rem;color:#14532d;font-weight:500}
+.fb .rn {margin-top:6px;padding:7px 11px;background:rgba(255,255,255,.7);border:1px solid var(–border);border-radius:7px;font-size:.76rem;color:var(–ink2)}
+.fb .rn strong{color:var(–ink)}
+
+/* COMPLETE */
+.done{background:var(–card);border:2px solid var(–border);border-radius:18px;padding:34px 22px;text-align:center;display:none;margin-bottom:16px}
+.done.show{display:block}
+.done-emoji{font-size:3rem;margin-bottom:10px}
+.done-score{font-family:‘DM Mono’,monospace;font-size:3.3rem;font-weight:500;line-height:1}
+.done-lbl{font-size:.78rem;color:var(–muted);margin-bottom:12px}
+.done-grade{font-size:.95rem;font-weight:800;margin-bottom:14px}
+.done-chips{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+.dc{padding:6px 13px;border-radius:20px;font-size:.73rem;font-weight:800}
+.dc-ok {background:var(–gbg);color:var(–green)}
+.dc-fail{background:var(–rbg);color:var(–red)}
+.dc-pts{background:rgba(180,83,9,.1);color:var(–gold)}
+.done-btns{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}
+.db{padding:9px 20px;border-radius:9px;border:none;font-family:‘Outfit’,sans-serif;font-size:.83rem;font-weight:800;cursor:pointer;transition:all .2s}
+.db-p{background:linear-gradient(135deg,var(–a),var(–the));color:#fff}.db-p:hover{opacity:.85}
+.db-s{background:var(–surface);border:1.5px solid var(–border);color:var(–ink2)}.db-s:hover{border-color:var(–a);color:var(–a)}
+
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.qcard{animation:up .27s ease both}
+.qcard:nth-child(2){animation-delay:.04s}.qcard:nth-child(3){animation-delay:.08s}
+.qcard:nth-child(4){animation-delay:.12s}.qcard:nth-child(5){animation-delay:.16s}
+.qcard:nth-child(6){animation-delay:.20s}.qcard:nth-child(7){animation-delay:.24s}
+.qcard:nth-child(8){animation-delay:.28s}.qcard:nth-child(9){animation-delay:.32s}
+.qcard:nth-child(10){animation-delay:.36s}.qcard:nth-child(11){animation-delay:.40s}
+</style>
+
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-icon">📰</div>
+  <div class="hdr-text">
+    <h1>A &nbsp;·&nbsp; AN &nbsp;·&nbsp; THE &nbsp;·&nbsp; ∅</h1>
+    <p>Articles Practice · Selección · Writing · Corrección de errores</p>
+  </div>
+  <div class="hdr-pts">
+    <div class="hdr-pts-num" id="g-pts">0</div>
+    <div class="hdr-pts-lbl">puntos</div>
+  </div>
+</div>
+
+<div class="big4" id="big4">
+  <div class="b4 act-a"  id="b4-0" onclick="switchBig(0)"><div class="b4-word">A</div><div class="b4-sub">Indefinido</div></div>
+  <div class="b4"        id="b4-1" onclick="switchBig(1)"><div class="b4-word">AN</div><div class="b4-sub">Vocal</div></div>
+  <div class="b4"        id="b4-2" onclick="switchBig(2)"><div class="b4-word">THE</div><div class="b4-sub">Definido</div></div>
+  <div class="b4"        id="b4-3" onclick="switchBig(3)"><div class="b4-word">∅</div><div class="b4-sub">Sin artículo</div></div>
+  <div class="b4"        id="b4-4" onclick="switchBig(4)"><div class="b4-word">MIX</div><div class="b4-sub">Todos</div></div>
+</div>
+
+<div class="stabs" id="stabs"></div>
+<div class="prog"><div class="pf" id="pf" style="width:0%"></div></div>
+<div id="sections"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════
+const DATA = [
+
+// ── A ────────────────────────────────────────────────
+{
+  big:0,id:'a-basic',label:'A – Básico',stab:'s-a',color:'var(--a)',
+  qs:[
+    {type:'4btn',tag:'tg-a',lbl:'Article A',qtype:'Indefinido',
+     instr:'Choose the correct article:',
+     sent:'She wants to be _____ doctor when she grows up.',sig:'profession / first mention',
+     ans:'a',
+     cor:'She wants to be <strong>a</strong> doctor.',
+     exp:'Use <strong>A</strong> before singular countable nouns starting with a consonant sound, when mentioning for the first time or referring to "one of many."',
+     rule:'<strong>A</strong> + singular countable noun (consonant sound) — first mention / one of many'},
+    {type:'mc',tag:'tg-a',lbl:'Article A',qtype:'Indefinido',
+     instr:'Choose the correct article:',
+     sent:'I saw _____ dog in the park. It was very big.',sig:'first mention',
+     opts:['a','an','the','—'],ans:0,
+     cor:'I saw <strong>a</strong> dog in the park.',
+     exp:'First mention of a noun (we don\'t know which dog yet) → <strong>A</strong>. Then: "The dog was very big" (now we know which one).',
+     rule:'First mention → <strong>A/AN</strong> · Second mention → <strong>THE</strong>'},
+    {type:'write',tag:'tg-a',lbl:'Article A',qtype:'Escribir',
+     instr:'Fill in with A, AN, THE, or — (nothing):',
+     sent:'He\'s _____ engineer at _____ big tech company.',sig:'profession + description',
+     hint:'engineer = consonant / big = consonant',
+     answers:['an / a'],
+     cor:'He\'s <strong>an</strong> engineer at <strong>a</strong> big tech company.',
+     exp:'"Engineer" starts with vowel sound /ɛ/ → AN. "Big" starts with /b/ consonant → A.',
+     rule:'<strong>AN</strong> + vowel sound · <strong>A</strong> + consonant sound'},
+    {type:'4btn',tag:'tg-a',lbl:'Article A',qtype:'Indefinido',
+     instr:'Choose the correct article:',
+     sent:'Could you pass me _____ pen, please?',sig:'any one / unspecific',
+     ans:'a',
+     cor:'Could you pass me <strong>a</strong> pen?',
+     exp:'Any pen (not a specific one) → <strong>A</strong>. If it were a specific pen: "Could you pass me THE pen?" (the one we talked about).',
+     rule:'<strong>A</strong> = any one / unspecific · <strong>THE</strong> = specific / already known'},
+    {type:'mc',tag:'tg-err',lbl:'Error',qtype:'Error',
+     instr:'Find the INCORRECT sentence:',
+     sent:'Which one has an error?',sig:'article error',
+     opts:['She is a teacher.','He bought a new car.','It was the great movie.','They found a solution.'],ans:2,
+     cor:'"It was <strong>a</strong> great movie." (first mention, not specific)',
+     exp:'"The great movie" implies a specific movie already known. First mention or general → <strong>A</strong>.',
+     rule:'First general mention → <strong>A</strong>, not THE'},
+    {type:'4btn',tag:'tg-a',lbl:'Article A',qtype:'Indefinido',
+     instr:'Choose the correct article:',
+     sent:'She earns $50,000 _____ year.',sig:'per / rate',
+     ans:'a',
+     cor:'She earns $50,000 <strong>a</strong> year.',
+     exp:'A = per in expressions of rate or frequency: once <strong>a</strong> week, three times <strong>a</strong> day, $50 <strong>a</strong> hour.',
+     rule:'<strong>A</strong> = per (once a week · twice a day · $10 a kilo)'},
+    {type:'write',tag:'tg-a',lbl:'Article A',qtype:'Escribir',
+     instr:'Fill in: A or AN?',
+     sent:'It\'s _____ one-hour drive from here.',sig:'one-hour',
+     hint:'one = /wʌn/ — consonant sound W',
+     answers:['a'],
+     cor:'It\'s <strong>a</strong> one-hour drive.',
+     exp:'"One" sounds like /wʌn/ which starts with W (consonant sound) → use <strong>A</strong>, not AN.',
+     rule:'<strong>A</strong> one / university / European (W/Y consonant sound despite spelling)'},
+    {type:'mc',tag:'tg-a',lbl:'Article A',qtype:'Indefinido',
+     instr:'Choose the correct article:',
+     sent:'I need to make _____ decision about my career.',sig:'singular countable',
+     opts:['a','an','the','—'],ans:0,
+     cor:'I need to make <strong>a</strong> decision.',
+     exp:'"Decision" is singular and countable. Not a specific decision → <strong>A</strong>.',
+     rule:'<strong>A</strong> + singular countable noun (decision · plan · idea · choice)'},
+  ]
+},
+
+// ── AN ───────────────────────────────────────────────
+{
+  big:1,id:'an-basic',label:'AN – Básico',stab:'s-an',color:'var(--an)',
+  qs:[
+    {type:'4btn',tag:'tg-an',lbl:'Article AN',qtype:'Vocal',
+     instr:'Choose the correct article:',
+     sent:'She ate _____ apple for breakfast.',sig:'apple = vowel /æ/',
+     ans:'an',
+     cor:'She ate <strong>an</strong> apple.',
+     exp:'<strong>AN</strong> before words starting with a VOWEL SOUND: an apple, an egg, an orange, an umbrella.',
+     rule:'<strong>AN</strong> + vowel sound (a · e · i · o · u)'},
+    {type:'mc',tag:'tg-an',lbl:'Article AN',qtype:'Vocal',
+     instr:'Choose the correct article:',
+     sent:'It was _____ honest mistake. We all make them.',sig:'honest = silent H',
+     opts:['a','an','the','—'],ans:1,
+     cor:'It was <strong>an</strong> honest mistake.',
+     exp:'"Honest" starts with a silent H — the word sounds like /ˈɒnɪst/ starting with a vowel → <strong>AN</strong>.',
+     rule:'<strong>AN</strong> when H is silent: an honest · an hour · an honour'},
+    {type:'write',tag:'tg-an',lbl:'Article AN',qtype:'Escribir',
+     instr:'Fill in with A or AN:',
+     sent:'He is _____ excellent teacher and _____ truly inspiring person.',sig:'excellent / inspiring',
+     hint:'excellent = /ɛ/ vowel / inspiring = /ɪ/ vowel',
+     answers:['an / a'],
+     cor:'He is <strong>an</strong> excellent teacher and <strong>a</strong> truly inspiring person.',
+     exp:'"Excellent" starts with vowel /ɛ/ → AN. "Truly" starts with consonant /t/ → A truly.',
+     rule:'Rule is based on SOUND not spelling: an excellent · a truly inspiring'},
+    {type:'4btn',tag:'tg-an',lbl:'Article AN',qtype:'Vocal',
+     instr:'Choose the correct article:',
+     sent:'She waited for _____ hour outside the office.',sig:'hour = silent H',
+     ans:'an',
+     cor:'She waited for <strong>an</strong> hour.',
+     exp:'"Hour" has a silent H → sounds like /aʊər/ → vowel sound → <strong>AN</strong>.',
+     rule:'<strong>AN</strong> hour · an honest · an honour (silent H)'},
+    {type:'mc',tag:'tg-err',lbl:'Error',qtype:'Error',
+     instr:'Find the INCORRECT sentence:',
+     sent:'Which one has an error?',sig:'a/an error',
+     opts:['She is an engineer.','He has an umbrella.','It was a historic moment.','They made a error in the report.'],ans:3,
+     cor:'"They made <strong>an</strong> error in the report."',
+     exp:'"Error" starts with vowel /ɛ/ → needs <strong>AN</strong>. "A error" is wrong.',
+     rule:'<strong>AN</strong> + vowel sound: an error · an idea · an opportunity'},
+    {type:'mc',tag:'tg-an',lbl:'Article AN',qtype:'Vocal',
+     instr:'Choose the correct article:',
+     sent:'It was _____ historic occasion that no one will forget.',sig:'historic',
+     opts:['a','an','the','—'],ans:0,
+     cor:'It was <strong>a</strong> historic occasion.',
+     exp:'"Historic" starts with /h/ consonant sound → <strong>A</strong>. Compare: "an hour" (silent H). Most H-words use A.',
+     rule:'<strong>A</strong> historic · a hotel · a habit (H is pronounced)'},
+    {type:'write',tag:'tg-an',lbl:'Article AN',qtype:'Escribir',
+     instr:'Fill in with A or AN:',
+     sent:'He gave _____ unexpected answer in _____ unusual situation.',sig:'unexpected / unusual',
+     hint:'unexpected = /ʌn/ vowel / unusual = /ʌn/ vowel',
+     answers:['an / an'],
+     cor:'He gave <strong>an</strong> unexpected answer in <strong>an</strong> unusual situation.',
+     exp:'Both "unexpected" and "unusual" start with vowel sound /ʌ/ → both use <strong>AN</strong>.',
+     rule:'<strong>AN</strong> unexpected · unusual · unforgettable · unfortunate'},
+    {type:'4btn',tag:'tg-an',lbl:'Article AN',qtype:'Vocal',
+     instr:'A or AN?',
+     sent:'She has _____ MBA from Harvard.',sig:'MBA = /ɛm/ vowel sound',
+     ans:'an',
+     cor:'She has <strong>an</strong> MBA from Harvard.',
+     exp:'With abbreviations, use A/AN based on how you SAY the first letter. M sounds like /ɛm/ (vowel) → <strong>AN</strong>.',
+     rule:'Abbreviations: say the first letter — AN MBA · AN FBI agent · A UN report'},
+  ]
+},
+
+// ── THE ──────────────────────────────────────────────
+{
+  big:2,id:'the-specific',label:'THE – Específico',stab:'s-the',color:'var(--the)',
+  qs:[
+    {type:'4btn',tag:'tg-the',lbl:'THE',qtype:'Definido',
+     instr:'Choose the correct article:',
+     sent:'I bought a book yesterday. _____ book is really interesting.',sig:'second mention',
+     ans:'the',
+     cor:'<strong>The</strong> book is really interesting.',
+     exp:'Second mention of a noun → <strong>THE</strong> (we now know which book).',
+     rule:'Second mention → <strong>THE</strong> (we know which one now)'},
+    {type:'mc',tag:'tg-the',lbl:'THE',qtype:'Definido',
+     instr:'Choose the correct article:',
+     sent:'_____ Eiffel Tower is one of the most visited monuments in the world.',sig:'unique landmark',
+     opts:['A','An','The','—'],ans:2,
+     cor:'<strong>The</strong> Eiffel Tower.',
+     exp:'Unique things / one of a kind → <strong>THE</strong>: the Eiffel Tower, the Amazon River, the Moon, the Sun.',
+     rule:'<strong>THE</strong> + unique things (the Sun · the Moon · the Earth · landmarks)'},
+    {type:'write',tag:'tg-the',lbl:'THE',qtype:'Escribir',
+     instr:'Fill in with A, AN, THE, or — (nothing):',
+     sent:'Can you close _____ door? _____ wind is coming in.',sig:'specific door / specific wind',
+     hint:'specific door = THE / specific wind = THE',
+     answers:['the / the'],
+     cor:'Can you close <strong>the</strong> door? <strong>The</strong> wind is coming in.',
+     exp:'Both refer to specific things known to both speakers → <strong>THE</strong>.',
+     rule:'<strong>THE</strong> when both speakers know which one is meant'},
+    {type:'4btn',tag:'tg-the',lbl:'THE',qtype:'Superlativo',
+     instr:'Choose the correct article:',
+     sent:'She is _____ best student in the class.',sig:'superlative',
+     ans:'the',
+     cor:'She is <strong>the</strong> best student.',
+     exp:'Superlatives always require <strong>THE</strong>: the best, the worst, the most, the tallest.',
+     rule:'<strong>THE</strong> + superlative (the best · the worst · the tallest · the most)'},
+    {type:'mc',tag:'tg-the',lbl:'THE',qtype:'Definido',
+     instr:'Choose the correct article:',
+     sent:'_____ Amazon is the longest river in South America.',sig:'river name',
+     opts:['A','An','The','—'],ans:2,
+     cor:'<strong>The</strong> Amazon.',
+     exp:'Rivers, oceans, mountain ranges, and deserts use <strong>THE</strong>: the Amazon, the Pacific, the Alps.',
+     rule:'<strong>THE</strong> + rivers · oceans · mountain ranges · deserts'},
+    {type:'mc',tag:'tg-err',lbl:'Error',qtype:'Error',
+     instr:'Find the INCORRECT sentence:',
+     sent:'Which one has an error?',sig:'THE error',
+     opts:['The sun sets in the west.','She plays the piano every day.','He is the engineer at the company.','Turn left at the traffic lights.'],ans:2,
+     cor:'"He is <strong>an</strong> engineer at the company." (profession = A/AN)',
+     exp:'Professions with "be" → A/AN: he is AN engineer, she is A doctor. Not THE unless it\'s a unique/specific role.',
+     rule:'He is <strong>A/AN</strong> + profession (not THE)'},
+    {type:'write',tag:'tg-the',lbl:'THE',qtype:'Escribir',
+     instr:'Fill in with THE or — (nothing):',
+     sent:'She plays _____ guitar in _____ evenings.',sig:'instrument / time',
+     hint:'instrument = THE / general time = THE evenings',
+     answers:['the / the'],
+     cor:'She plays <strong>the</strong> guitar in <strong>the</strong> evenings.',
+     exp:'Musical instruments → THE: play the guitar, the piano, the violin. Time periods → THE: in the morning, in the evenings.',
+     rule:'<strong>THE</strong> + musical instruments · <strong>THE</strong> + parts of day'},
+    {type:'4btn',tag:'tg-the',lbl:'THE',qtype:'Definido',
+     instr:'Choose the correct article:',
+     sent:'Who invented _____ telephone?',sig:'invention / unique item',
+     ans:'the',
+     cor:'Who invented <strong>the</strong> telephone?',
+     exp:'Inventions referred to as a concept → <strong>THE</strong>: the telephone, the internet, the wheel.',
+     rule:'<strong>THE</strong> + inventions as concepts (the internet · the wheel · the telephone)'},
+  ]
+},
+{
+  big:2,id:'the-advanced',label:'THE – Avanzado',stab:'s-the',color:'var(--the)',
+  qs:[
+    {type:'mc',tag:'tg-the',lbl:'THE',qtype:'Nationalidades',
+     instr:'Choose the correct article:',
+     sent:'_____ French are known for their cuisine.',sig:'nationality as a group',
+     opts:['A','An','The','—'],ans:2,
+     cor:'<strong>The</strong> French are known for their cuisine.',
+     exp:'THE + adjective used as a noun for a group: the French, the British, the elderly, the poor.',
+     rule:'<strong>THE</strong> + nationality/group adjective (the French · the British · the elderly)'},
+    {type:'4btn',tag:'tg-the',lbl:'THE',qtype:'Ordinal',
+     instr:'Choose the correct article:',
+     sent:'She was _____ first person to arrive.',sig:'ordinal number',
+     ans:'the',
+     cor:'She was <strong>the</strong> first person to arrive.',
+     exp:'Ordinal numbers (first, second, third...) always need <strong>THE</strong>.',
+     rule:'<strong>THE</strong> + ordinal numbers (the first · the second · the last · the next)'},
+    {type:'write',tag:'tg-the',lbl:'THE',qtype:'Escribir',
+     instr:'Fill in with THE or — (nothing):',
+     sent:'_____ life is too short to waste on _____ regrets.',sig:'abstract / plural general',
+     hint:'abstract life = nothing / general plural = nothing',
+     answers:['— / —','∅ / ∅','/ '],
+     cor:'<strong>Life</strong> is too short to waste on <strong>regrets</strong>. (no article)',
+     exp:'Abstract concepts in general statements → no article: life, love, happiness. General plural → no article: regrets, problems.',
+     rule:'General abstract / plural → <strong>∅</strong> (no article)'},
+    {type:'mc',tag:'tg-the',lbl:'THE',qtype:'Periódicos',
+     instr:'Choose the correct article:',
+     sent:'Have you read _____ New York Times today?',sig:'newspaper name',
+     opts:['A','An','The','—'],ans:2,
+     cor:'Have you read <strong>The</strong> New York Times today?',
+     exp:'Newspaper names typically use THE: The New York Times, The Guardian, The Washington Post.',
+     rule:'<strong>THE</strong> + newspaper names (The Guardian · The Times)'},
+    {type:'mc',tag:'tg-err',lbl:'Error',qtype:'Error',
+     instr:'Find the INCORRECT sentence:',
+     sent:'Which one has an error?',sig:'THE advanced error',
+     opts:['He plays the violin beautifully.','The rich should help the poor.','She is the best in her class.','Can you play a piano for us?'],ans:3,
+     cor:'"Can you play <strong>the</strong> piano for us?"',
+     exp:'Musical instruments → always <strong>THE</strong>: play the piano, the guitar, the violin.',
+     rule:'<strong>THE</strong> + instrument — never A/AN with instruments'},
+    {type:'4btn',tag:'tg-the',lbl:'THE',qtype:'Definido',
+     instr:'Choose the correct article:',
+     sent:'She\'s _____ only person who knows the truth.',sig:'only / unique in context',
+     ans:'the',
+     cor:'She\'s <strong>the</strong> only person who knows.',
+     exp:'"Only" makes something unique → <strong>THE</strong>. Also: the same, the right, the wrong, the next.',
+     rule:'<strong>THE</strong> + only · same · right · wrong · next · last'},
+    {type:'write',tag:'tg-the',lbl:'THE',qtype:'Escribir',
+     instr:'Fill in with A, THE, or — (nothing):',
+     sent:'I had _____ great time at _____ party last night.',sig:'great time / specific party',
+     hint:'a great time = first mention / the party = specific (last night)',
+     answers:['a / the'],
+     cor:'I had <strong>a</strong> great time at <strong>the</strong> party last night.',
+     exp:'"A great time" = expression (have a good/great time). "The party" = specific party already known.',
+     rule:'Have <strong>a</strong> good time · <strong>a</strong> great time (fixed expressions)'},
+  ]
+},
+
+// ── ZERO ─────────────────────────────────────────────
+{
+  big:3,id:'zero-general',label:'∅ – General',stab:'s-zero',color:'var(--zero)',
+  qs:[
+    {type:'4btn',tag:'tg-zero',lbl:'∅ No article',qtype:'General',
+     instr:'Choose the correct article:',
+     sent:'_____ love is the most powerful force in the universe.',sig:'abstract concept / general',
+     ans:'—',
+     cor:'<strong>Love</strong> is the most powerful force. (no article)',
+     exp:'Abstract nouns used in general statements → NO article: love, happiness, freedom, justice.',
+     rule:'<strong>∅</strong> + abstract nouns in general (love · happiness · freedom · knowledge)'},
+    {type:'mc',tag:'tg-zero',lbl:'∅ No article',qtype:'General',
+     instr:'Choose the correct article:',
+     sent:'_____ children need love and stability to grow.',sig:'general plural',
+     opts:['A','The','—','Some'],ans:2,
+     cor:'<strong>Children</strong> need love and stability. (no article)',
+     exp:'General plural nouns → NO article: children, dogs, problems, people (in general).',
+     rule:'<strong>∅</strong> + general plural nouns (children · dogs · teachers in general)'},
+    {type:'write',tag:'tg-zero',lbl:'∅ No article',qtype:'Escribir',
+     instr:'Fill in with THE or — (nothing):',
+     sent:'She studied _____ medicine at _____ University of Costa Rica.',sig:'subject / proper name',
+     hint:'subject = nothing / proper name with "of" = THE',
+     answers:['— / the','/ the'],
+     cor:'She studied <strong>medicine</strong> at <strong>the</strong> University of Costa Rica.',
+     exp:'Academic subjects → no article: study medicine, study history. BUT: "the University of..." uses THE because of "of".',
+     rule:'<strong>∅</strong> + subjects · <strong>THE</strong> + University of [place]'},
+    {type:'4btn',tag:'tg-zero',lbl:'∅ No article',qtype:'Sports',
+     instr:'Choose the correct article:',
+     sent:'He plays _____ football every Sunday.',sig:'sport / game',
+     ans:'—',
+     cor:'He plays <strong>football</strong> every Sunday. (no article)',
+     exp:'Sports and games → NO article: play football, play chess, play tennis.',
+     rule:'<strong>∅</strong> + sports & games (play football · tennis · chess · basketball)'},
+    {type:'mc',tag:'tg-zero',lbl:'∅ No article',qtype:'Meals',
+     instr:'Choose the correct article:',
+     sent:'We usually have _____ dinner at 7pm.',sig:'meal / general',
+     opts:['a','the','—','an'],ans:2,
+     cor:'We usually have <strong>dinner</strong> at 7pm. (no article)',
+     exp:'Meals in general → NO article: have breakfast, have lunch, have dinner, have tea.',
+     rule:'<strong>∅</strong> + meals (have breakfast · lunch · dinner · tea)'},
+    {type:'mc',tag:'tg-err',lbl:'Error',qtype:'Error',
+     instr:'Find the INCORRECT sentence:',
+     sent:'Which one has an error?',sig:'zero article error',
+     opts:['Knowledge is power.','She loves the music.','He goes to school by bus.','They eat lunch at noon.'],ans:1,
+     cor:'"She loves <strong>music</strong>." (no article for general)',
+     exp:'"The music" means specific music. When talking about music in general → NO article.',
+     rule:'<strong>∅</strong> + uncountable nouns in general (music · water · information)'},
+    {type:'write',tag:'tg-zero',lbl:'∅ No article',qtype:'Escribir',
+     instr:'Fill in with THE or — (nothing):',
+     sent:'He goes to _____ church every Sunday and then visits _____ prison where his brother is.',sig:'function vs specific',
+     hint:'church (function) = nothing / prison (specific) = the',
+     answers:['— / the','/ the'],
+     cor:'He goes to <strong>church</strong> (function) and visits <strong>the</strong> prison (specific).',
+     exp:'Go to church/school/hospital/prison = for their function → NO article. The specific building → THE.',
+     rule:'<strong>∅</strong> go to school/church/hospital (purpose) · <strong>THE</strong> specific building'},
+    {type:'4btn',tag:'tg-zero',lbl:'∅ No article',qtype:'Países',
+     instr:'Choose the correct article:',
+     sent:'She lives in _____ Costa Rica.',sig:'country name',
+     ans:'—',
+     cor:'She lives in <strong>Costa Rica</strong>. (no article)',
+     exp:'Most country names → NO article. Exception: countries that are plural or include "kingdom/states": the United States, the UK.',
+     rule:'<strong>∅</strong> + most countries · <strong>THE</strong> + the USA · the UK · the Philippines'},
+  ]
+},
+
+// ── MIX ──────────────────────────────────────────────
+{
+  big:4,id:'mix-all',label:'Mix – Todos',stab:'s-mix',color:'var(--zero)',
+  qs:[
+    {type:'4btn',tag:'tg-mix',lbl:'A/AN/THE/∅',qtype:'Mix',
+     instr:'Choose the correct article:',
+     sent:'She is _____ best teacher I\'ve ever had.',sig:'superlative',
+     ans:'the',
+     cor:'She is <strong>the</strong> best teacher.',
+     exp:'Superlatives → THE. Always.',
+     rule:'<strong>THE</strong> + superlative'},
+    {type:'mc',tag:'tg-mix',lbl:'A/AN/THE/∅',qtype:'Mix',
+     instr:'Choose the correct article:',
+     sent:'I need _____ information about the course.',sig:'uncountable',
+     opts:['a','an','the','—'],ans:3,
+     cor:'I need <strong>information</strong> about the course.',
+     exp:'"Information" is uncountable → no article. Never "an information" or "a information."',
+     rule:'<strong>∅</strong> + uncountable nouns (information · advice · news · furniture)'},
+    {type:'write',tag:'tg-mix',lbl:'A/AN/THE/∅',qtype:'Escribir',
+     instr:'Fill in with A, AN, THE, or — (nothing):',
+     sent:'_____ Amazon is _____ longest river and flows through _____ Brazil.',sig:'river/superlative/country',
+     hint:'river=THE / superlative=THE / country=nothing',
+     answers:['the / the / —','the / the /'],
+     cor:'<strong>The</strong> Amazon is <strong>the</strong> longest river and flows through <strong>Brazil</strong>.',
+     exp:'THE Amazon (river). THE longest (superlative). Brazil (country name — no article).',
+     rule:'<strong>THE</strong> rivers · superlatives · <strong>∅</strong> most countries'},
+    {type:'mc',tag:'tg-mix',lbl:'A/AN/THE/∅',qtype:'Mix',
+     instr:'Choose the correct article:',
+     sent:'He has _____ MBA and works as _____ consultant.',sig:'abbreviation + profession',
+     opts:['a / a','an / a','an / an','a / an'],ans:1,
+     cor:'He has <strong>an</strong> MBA and works as <strong>a</strong> consultant.',
+     exp:'MBA → M sounds like /ɛm/ (vowel) → AN. Consultant starts with /k/ (consonant) → A.',
+     rule:'AN MBA · AN HR manager · A consultant · A developer'},
+    {type:'4btn',tag:'tg-mix',lbl:'A/AN/THE/∅',qtype:'Mix',
+     instr:'Choose the correct article:',
+     sent:'Can you turn off _____ light? I want to sleep.',sig:'specific / both know which',
+     ans:'the',
+     cor:'Can you turn off <strong>the</strong> light?',
+     exp:'Both speakers know which light → <strong>THE</strong>.',
+     rule:'<strong>THE</strong> when context makes it clear which one'},
+    {type:'mc',tag:'tg-err',lbl:'Error',qtype:'Error',
+     instr:'Find the INCORRECT sentence:',
+     sent:'Which one has an error?',sig:'mix error',
+     opts:["She plays the piano.","He's an honest man.","I eat the breakfast every morning.","They go to school by bus."],ans:2,
+     cor:'"I eat <strong>breakfast</strong> every morning." (no article with meals)',
+     exp:'Meals in general → NO article: eat breakfast, have lunch, cook dinner.',
+     rule:'<strong>∅</strong> + meals in general (breakfast · lunch · dinner)'},
+    {type:'write',tag:'tg-mix',lbl:'A/AN/THE/∅',qtype:'Escribir',
+     instr:'Fill in with A, AN, THE, or — (nothing):',
+     sent:'I read _____ article about _____ environment. _____ article was really interesting.',sig:'first/second mention',
+     hint:'first mention=A / general=THE / second mention=THE',
+     answers:['an / the / the'],
+     cor:'I read <strong>an</strong> article about <strong>the</strong> environment. <strong>The</strong> article was really interesting.',
+     exp:'AN article (first mention, vowel). THE environment (specific concept we all know). THE article (second mention).',
+     rule:'1st mention → <strong>A/AN</strong> · 2nd mention → <strong>THE</strong> · known concept → <strong>THE</strong>'},
+    {type:'mc',tag:'tg-mix',lbl:'A/AN/THE/∅',qtype:'Mix',
+     instr:'Choose the correct option:',
+     sent:'_____ happiness comes from within, not from _____ money.',sig:'abstract concepts',
+     opts:['The / the','— / —','A / the','The / —'],ans:1,
+     cor:'<strong>Happiness</strong> comes from within, not from <strong>money</strong>.',
+     exp:'Abstract concepts in general statements → NO article: happiness, money, love, freedom.',
+     rule:'<strong>∅</strong> abstract nouns in general statements'},
+    {type:'4btn',tag:'tg-mix',lbl:'A/AN/THE/∅',qtype:'Mix',
+     instr:'Choose the correct article:',
+     sent:'She was _____ first woman to climb that mountain.',sig:'ordinal / unique',
+     ans:'the',
+     cor:'She was <strong>the</strong> first woman.',
+     exp:'THE + ordinal numbers (the first, the second, the last).',
+     rule:'<strong>THE</strong> + ordinal: the first · second · last · next'},
+    {type:'mc',tag:'tg-err',lbl:'Error',qtype:'Error',
+     instr:'Find ALL errors — choose the INCORRECT sentence:',
+     sent:'Which one is wrong?',sig:'final mix error',
+     opts:["He's the best player on the team.","She speaks French and the English.","I had a great time at the wedding.","It was an unforgettable experience."],ans:1,
+     cor:'"She speaks French and <strong>English</strong>." (no article with languages)',
+     exp:'Languages → NO article: speak English, learn Spanish, study French.',
+     rule:'<strong>∅</strong> + languages (speak English · learn Spanish · study French)'},
+  ]
+},
+];
+
+// ══════════════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════════════
+const BIG = [
+  {label:'A',  activeClass:'act-a',   color:'var(--a)',    ids:['a-basic']},
+  {label:'AN', activeClass:'act-an',  color:'var(--an)',   ids:['an-basic']},
+  {label:'THE',activeClass:'act-the', color:'var(--the)',  ids:['the-specific','the-advanced']},
+  {label:'∅',  activeClass:'act-zero',color:'var(--zero)', ids:['zero-general']},
+  {label:'MIX',activeClass:'act-mix', color:'#6d28d9',     ids:['mix-all']},
+];
+
+let bigIdx = 0;
+let curSub = {}; BIG.forEach((_,i)=>curSub[i]=0);
+let state  = {}; DATA.forEach(s=>{state[s.id]={};s.qs.forEach((_,qi)=>state[s.id][qi]={answered:false,correct:false});});
+let pts = 0;
+
+function secsForBig(bi){ return DATA.filter(d=>d.big===bi); }
+
+// ── SWITCH ──────────────────────────────────────────
+function switchBig(bi){
+  bigIdx=bi;
+  BIG.forEach((_,i)=>{
+    const el=document.getElementById(`b4-${i}`);
+    el.className=`b4${i===bi?' '+BIG[i].activeClass:''}`;
+  });
+  buildStabs(); renderCurrent();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildStabs(){
+  const el=document.getElementById('stabs'); el.innerHTML='';
+  secsForBig(bigIdx).forEach((sec,i)=>{
+    const btn=document.createElement('button');
+    btn.className=`st${i===curSub[bigIdx]?' '+sec.stab:''}`;
+    btn.textContent=sec.label;
+    btn.onclick=()=>{curSub[bigIdx]=i;buildStabs();renderCurrent();window.scrollTo({top:0,behavior:'smooth'});};
+    el.appendChild(btn);
+  });
+}
+
+function renderCurrent(){
+  const secs=secsForBig(bigIdx); const sec=secs[curSub[bigIdx]]; if(!sec) return;
+  renderSec(sec);
+}
+
+// ── RENDER ───────────────────────────────────────────
+function renderSec(sec){
+  const s=state[sec.id];
+  const total=sec.qs.length;
+  const answered=Object.values(s).filter(x=>x.answered).length;
+  const correct=Object.values(s).filter(x=>x.correct).length;
+  const wrong=answered-correct;
+
+  const pf=document.getElementById('pf');
+  pf.style.width=(answered/total*100)+'%'; pf.style.background=sec.color;
+
+  const cont=document.getElementById('sections'); cont.innerHTML='';
+  const wrap=document.createElement('div'); wrap.className='wrap';
+
+  // ref
+  const ref=document.createElement('div'); ref.className='ref';
+  ref.innerHTML=`
+    <div class="ref-title">📖 Quick Reference · Articles</div>
+    <div class="ref-grid">
+      <div class="rb rb-a">
+        <div class="rb-word">A</div>
+        <div class="rb-items">
+          <span>➤ consonant sound</span>
+          <span>➤ first mention</span>
+          <span>➤ one of many</span>
+          <span>➤ per (once a week)</span>
+          <span style="opacity:.6">a dog · a car · a one</span>
+        </div>
+      </div>
+      <div class="rb rb-an">
+        <div class="rb-word">AN</div>
+        <div class="rb-items">
+          <span>➤ vowel sound (a·e·i·o·u)</span>
+          <span>➤ silent H words</span>
+          <span>➤ abbreviations (vowel first)</span>
+          <span style="opacity:.6">an apple · an hour</span>
+          <span style="opacity:.6">an MBA · an FBI agent</span>
+        </div>
+      </div>
+      <div class="rb rb-the">
+        <div class="rb-word">THE</div>
+        <div class="rb-items">
+          <span>➤ specific / already known</span>
+          <span>➤ second mention</span>
+          <span>➤ superlatives</span>
+          <span>➤ unique things</span>
+          <span style="opacity:.6">the Sun · the best · the piano</span>
+        </div>
+      </div>
+      <div class="rb rb-zero">
+        <div class="rb-word">∅</div>
+        <div class="rb-items">
+          <span>➤ abstract nouns (general)</span>
+          <span>➤ plural nouns (general)</span>
+          <span>➤ sports · meals · languages</span>
+          <span>➤ most countries</span>
+          <span style="opacity:.6">love · breakfast · English</span>
+        </div>
+      </div>
+    </div>`;
+  wrap.appendChild(ref);
+
+  // stats
+  const stats=document.createElement('div'); stats.className='stats';
+  stats.innerHTML=`
+    <div class="stat"><div class="sv" style="color:var(--green)">${correct}</div><div class="sl">✅ Correctas</div></div>
+    <div class="stat"><div class="sv" style="color:var(--red)">${wrong}</div><div class="sl">❌ Incorrectas</div></div>
+    <div class="stat"><div class="sv" style="color:var(--gold)">${total-answered}</div><div class="sl">🃏 Quedan</div></div>`;
+  wrap.appendChild(stats);
+
+  // done
+  const done=document.createElement('div');
+  done.className='done'+(answered===total?' show':'');
+  done.id=`done-${sec.id}`;
+  if(answered===total) fillDone(done,correct,total,sec);
+  wrap.appendChild(done);
+
+  // questions
+  sec.qs.forEach((q,qi)=>wrap.appendChild(buildCard(q,qi,sec)));
+  cont.appendChild(wrap);
+}
+
+// ── BUILD CARD ───────────────────────────────────────
+function buildCard(q,qi,sec){
+  const s=state[sec.id][qi];
+  const card=document.createElement('div');
+  card.className=`qcard${s.answered?(s.correct?' ok':' fail'):''}`;
+  card.id=`qc-${sec.id}-${qi}`;
+
+  const sentHTML=q.sent.includes('_____')
+    ?q.sent.replace(/_{3,}/g,'<span class="gap">___</span>')
+    :q.sent;
+
+  const top=document.createElement('div'); top.className='qcard-top';
+  top.innerHTML=`
+    <div class="qmeta">
+      <div class="qnum" id="qn-${sec.id}-${qi}">${s.answered?(s.correct?'✓':'✗'):(qi+1)}</div>
+      <span class="qtag ${q.tag}">${q.lbl}</span>
+      <span class="qlbl">${q.qtype}</span>
+    </div>
+    <div class="qinstr">${q.instr}</div>
+    <div class="qsent">${sentHTML}${q.sig?`<br><span class="sig">🔑 ${q.sig}</span>`:''}</div>
+    ${q.hint?`<div style="margin-top:5px;font-size:.67rem;color:var(--muted);font-family:'DM Mono',monospace">💡 ${q.hint}</div>`:''}`;
+  card.appendChild(top);
+
+  // 4 buttons
+  if(q.type==='4btn'){
+    const row=document.createElement('div'); row.className='four-btns';
+    const arts=[{v:'a',cls:'a-h',lbl:'consonant'},{v:'an',cls:'an-h',lbl:'vowel'},{v:'the',cls:'the-h',lbl:'definido'},{v:'—',cls:'zero-h',lbl:'sin artículo'}];
+    arts.forEach(art=>{
+      const btn=document.createElement('div');
+      btn.className=`art-btn ${art.cls}${s.answered?' dis':''}`;
+      if(s.answered){
+        if(art.v===q.ans) btn.className+=' ok';
+        else if(art.v===s.chosen&&art.v!==q.ans) btn.className+=' bad';
+      }
+      btn.innerHTML=`${art.v==='—'?'∅':art.v.toUpperCase()}<span class="art-btn-lbl">${art.lbl}</span>`;
+      if(!s.answered) btn.onclick=()=>pick4(sec,qi,art.v);
+      row.appendChild(btn);
+    });
+    card.appendChild(row);
+  }
+  // mc
+  else if(q.type==='mc'){
+    const wrap=document.createElement('div'); wrap.className='opts';
+    const letters=['A','B','C','D'];
+    q.opts.forEach((opt,oi)=>{
+      const div=document.createElement('div');
+      div.id=`opt-${sec.id}-${qi}-${oi}`;
+      let cls='opt';
+      if(s.answered){cls+=' dis';if(oi===q.ans)cls+=' ok';else if(oi===s.chosen&&oi!==q.ans)cls+=' bad';}
+      div.className=cls;
+      div.innerHTML=`<span class="ol">${letters[oi]}</span>${opt}`;
+      if(!s.answered) div.onclick=()=>pickMC(sec,qi,oi);
+      wrap.appendChild(div);
+    });
+    card.appendChild(wrap);
+  }
+  // write
+  else{
+    const wrap=document.createElement('div'); wrap.className='write-area';
+    wrap.innerHTML=`
+      <div class="wr">
+        <input class="wi" id="wi-${sec.id}-${qi}" placeholder="a / an / the / — ?"
+          ${s.answered?'disabled':''}
+          onkeydown="if(event.key==='Enter')checkWrite('${sec.id}',${qi})">
+        <button class="chk" id="wb-${sec.id}-${qi}" onclick="checkWrite('${sec.id}',${qi})" ${s.answered?'disabled':''}>Check ✓</button>
+      </div>`;
+    card.appendChild(wrap);
+    if(s.answered&&s.saved){setTimeout(()=>{const wi=document.getElementById(`wi-${sec.id}-${qi}`);if(wi){wi.value=s.saved;wi.className='wi '+(s.correct?'ok':'fail');}},0);}
+  }
+
+  const fb=document.createElement('div');
+  fb.id=`fb-${sec.id}-${qi}`;
+  fb.className=`fb${s.answered?' show '+(s.correct?'ok':'fail'):''}`;
+  if(s.answered){fb.innerHTML=`${s.correct?'✅ <strong>Correct!</strong>':'❌ <strong>Incorrect.</strong>'} ${q.exp}<div class="cor">✓ ${q.cor}</div><div class="rn"><strong>📐 Rule:</strong> ${q.rule}</div>`;}
+  card.appendChild(fb);
+  return card;
+}
+
+// ── INTERACTIONS ─────────────────────────────────────
+function pick4(sec,qi,val){
+  if(state[sec.id][qi].answered) return;
+  const q=sec.qs[qi]; const correct=val===q.ans;
+  state[sec.id][qi]={answered:true,correct,chosen:val};
+  applyResult(sec,qi,correct,q);
+}
+
+function pickMC(sec,qi,oi){
+  if(state[sec.id][qi].answered) return;
+  const q=sec.qs[qi]; const correct=oi===q.ans;
+  state[sec.id][qi]={answered:true,correct,chosen:oi};
+  q.opts.forEach((_,i)=>{const el=document.getElementById(`opt-${sec.id}-${qi}-${i}`);if(!el)return;el.classList.add('dis');el.onclick=null;if(i===q.ans)el.classList.add('ok');else if(i===oi&&!correct)el.classList.add('bad');});
+  applyResult(sec,qi,correct,q);
+}
+
+function checkWrite(secId,qi){
+  const sec=DATA.find(d=>d.id===secId);
+  if(!sec||state[secId][qi].answered) return;
+  const q=sec.qs[qi];
+  const inp=document.getElementById(`wi-${secId}-${qi}`);
+  const btn=document.getElementById(`wb-${secId}-${qi}`);
+  if(!inp) return;
+  const val=inp.value.trim().toLowerCase().replace(/\s+/g,' ');
+  const correct=q.answers.some(a=>{
+    const a2=a.toLowerCase().replace(/∅/g,'—').replace(/\s+/g,' ');
+    return val===a2||val.includes(a2.split('/')[0].trim())||a2.split('/').some(p=>val===p.trim());
+  });
+  state[secId][qi]={answered:true,correct,saved:inp.value};
+  inp.disabled=true; if(btn) btn.disabled=true;
+  inp.className='wi '+(correct?'ok':'fail');
+  applyResult(sec,qi,correct,q);
+}
+
+function applyResult(sec,qi,correct,q){
+  const card=document.getElementById(`qc-${sec.id}-${qi}`);
+  const num=document.getElementById(`qn-${sec.id}-${qi}`);
+  const fb=document.getElementById(`fb-${sec.id}-${qi}`);
+  if(card) card.classList.add(correct?'ok':'fail');
+  if(num)  num.textContent=correct?'✓':'✗';
+  if(fb){fb.innerHTML=`${correct?'✅ <strong>Correct!</strong>':'❌ <strong>Incorrect.</strong>'} ${q.exp}<div class="cor">✓ ${q.cor}</div><div class="rn"><strong>📐 Rule:</strong> ${q.rule}</div>`;fb.className=`fb show ${correct?'ok':'fail'}`;}
+  if(correct){pts+=10;document.getElementById('g-pts').textContent=pts;}
+
+  const s=state[sec.id]; const total=sec.qs.length;
+  const answered=Object.values(s).filter(x=>x.answered).length;
+  const corr=Object.values(s).filter(x=>x.correct).length;
+  const sv=document.querySelectorAll('.sv');
+  if(sv[0]) sv[0].textContent=corr;
+  if(sv[1]) sv[1].textContent=answered-corr;
+  if(sv[2]) sv[2].textContent=total-answered;
+  const pf=document.getElementById('pf');
+  if(pf) pf.style.width=(answered/total*100)+'%';
+
+  if(answered===total) setTimeout(()=>{
+    const done=document.getElementById(`done-${sec.id}`);
+    if(done){fillDone(done,corr,total,sec);done.classList.add('show');done.scrollIntoView({behavior:'smooth',block:'center'});}
+  },500);
+}
+
+function fillDone(el,correct,total,sec){
+  const pct=Math.round(correct/total*100);
+  const secs=secsForBig(bigIdx); const idx=secs.indexOf(sec);
+  const next=secs[(idx+1)%secs.length];
+  el.innerHTML=`
+    <div class="done-emoji">${pct>=90?'🏆':pct>=70?'🎉':pct>=50?'📖':'💪'}</div>
+    <div class="done-score" style="color:${sec.color}">${correct}/${total}</div>
+    <div class="done-lbl">correctas en ${sec.label}</div>
+    <div class="done-grade">${pct>=90?'🔥 Perfect! Articles mastered!':pct>=70?'👍 Great work!':pct>=50?'📖 Good effort — review the rules.':'💪 Keep going!'}</div>
+    <div class="done-chips">
+      <div class="dc dc-ok">✅ ${correct} correctas</div>
+      <div class="dc dc-fail">❌ ${total-correct} incorrectas</div>
+      <div class="dc dc-pts">⭐ +${correct*10} pts</div>
+    </div>
+    <div class="done-btns">
+      <button class="db db-p" onclick="restart('${sec.id}')">↺ Repetir</button>
+      <button class="db db-s" onclick="jumpTo('${next.id}')">→ ${next.label}</button>
+    </div>`;
+}
+
+function restart(secId){
+  const sec=DATA.find(d=>d.id===secId);
+  Object.values(state[secId]).forEach(s=>{if(s.correct)pts-=10;});
+  pts=Math.max(0,pts); document.getElementById('g-pts').textContent=pts;
+  state[secId]={}; sec.qs.forEach((_,qi)=>state[secId][qi]={answered:false,correct:false});
+  renderCurrent(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function jumpTo(secId){
+  const sec=DATA.find(d=>d.id===secId);
+  const secs=secsForBig(sec.big); bigIdx=sec.big;
+  curSub[bigIdx]=secs.indexOf(sec);
+  BIG.forEach((_,i)=>document.getElementById(`b4-${i}`).className=`b4${i===bigIdx?' '+BIG[i].activeClass:''}`);
+  buildStabs(); renderCurrent(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// INIT
+buildStabs(); renderCurrent();
+</script>
+
+</body>
+</html>
