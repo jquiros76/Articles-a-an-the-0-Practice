@@ -19,7 +19,7 @@
   --gold:#b45309;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;min-height:100vh}
+body{background:#fff9f0;color:#1c1008;font-family:'Outfit',sans-serif;min-height:100vh;font-size: 18px}
 
 /* HEADER */
 .hdr{
@@ -68,7 +68,11 @@ body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;min-h
 .pf{height:100%;transition:width .4s ease}
 
 /* WRAP */
-.wrap{max-width:720px;margin:0 auto;padding:20px 13px 80px}
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 20px 80px;
+}
 
 /* REF CARD */
 .ref{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:18px 20px;margin-bottom:18px}
@@ -91,7 +95,7 @@ body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;min-h
 .sl{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
 
 /* QUESTION CARD */
-.qcard{background:var(--card);border:2px solid var(--border);border-radius:15px;overflow:hidden;margin-bottom:12px;transition:border-color .22s,box-shadow .22s}
+.qcard{background:var(--card);border:2px solid var(--border);border-radius:15px;overflow:hidden;margin-bottom:12px;transition:border-color .22s, box-shadow: 0 8px 25px rgba(0,0,0,.06);}
 .qcard.ok  {border-color:var(--green);box-shadow:0 2px 10px rgba(21,128,61,.1)}
 .qcard.fail{border-color:var(--red);box-shadow:0 2px 10px rgba(185,28,28,.09)}
 .qcard-top{padding:14px 17px 11px;border-bottom:1px solid var(--border)}
